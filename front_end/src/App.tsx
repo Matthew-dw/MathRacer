@@ -2,7 +2,15 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+
+
 function App() {
+  var ws : WebSocket = new WebSocket("ws://localhost:3001/")
+
+  ws.onopen = () => {
+    ws.send("Here's some text that the server is urgently awaiting!");
+  };
+  
   return (
     <div className="App">
       <header className="App-header">

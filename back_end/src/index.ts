@@ -1,13 +1,26 @@
 import express, { Application, Request, Response } from 'express'
+import { createServer, Server } from 'http';
+
+import { WebSocket, WebSocketServer } from 'ws';
 
 const app: Application = express()
-
+const server: Server = createServer(app)
+const wss: WebSocketServer = new WebSocketServer({ server })
 const port: number = 3001
+  
+wss.on('connection', (ws : WebSocket) => {
+    ws.on('message', (message : string) => {
+      console.log('received: %s', message);
+    });
+    
+    ws.send('testing');
+});
 
-app.get('/toto', (req: Request, res: Response) => {
- res.send('Hello toto')
+
+app.get('/', (req, res) => {
+    res.send('Hello World!')
 })
-
-app.listen(port, function () {
- console.log(`App is listening on port ${port} !`)
+  
+server.listen(process.env.PORT || port, () => {
+    console.log(`App is listening on port ${port} !`)
 })
