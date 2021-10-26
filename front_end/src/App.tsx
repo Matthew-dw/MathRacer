@@ -1,33 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import { Button, Container, Paper, TextField } from '@mui/material';
 
 
-
+var ws : WebSocket = new WebSocket("ws://localhost:3001/")
 function App() {
-  var ws : WebSocket = new WebSocket("ws://localhost:3001/")
-
-  ws.onopen = () => {
-    ws.send("Here's some text that the server is urgently awaiting!");
-  };
+  const [messages, setMessages] = useState([""]);
+  const [answer, setAnswer] = useState("")
   
+  ws.onmessage = (event : MessageEvent) => {
+    switch (event.data) {
+      case "True": {
+        break;
+      }
+      case "False": {
+        break;
+      }
+      case "Game Over": {
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    setMessages(messages.concat(event.data))
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAnswer(event.target.value)
+  }
+
+  const submitAnswer = () => {
+    ws.send(answer)
+    setAnswer("")
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="sm">
+      <Paper >
+        <TextField value={answer} onChange={handleChange} />
+        <Button variant="contained" onClick={submitAnswer}>Submit Answer</Button>
+        { messages.map(m => <div> {m} </div>) }
+      </Paper>
+    </Container>
   );
 }
 
