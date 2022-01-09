@@ -1,5 +1,11 @@
 import { randomInt } from "crypto";
-import { Operation } from "./Operation";
+
+export enum Operation {
+    add,
+    subtract,
+    multiply,
+    divide
+}
 
 export class Question {
     n1: number;
@@ -9,7 +15,6 @@ export class Question {
 
     constructor(operations: Operation[]) {
         this.operator = operations[randomInt(operations.length)];
-
         switch (this.operator) {
             case Operation.add: {
                 this.n1 = randomInt(1, 50);
@@ -38,7 +43,7 @@ export class Question {
         }
     }
 
-    toString(): String {
+    toString(): string {
         let Opstring = this.operator === Operation.add ? '+' :
             this.operator === Operation.divide ? '/' :
                 this.operator === Operation.multiply ? '*' : '-';
